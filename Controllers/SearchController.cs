@@ -26,7 +26,7 @@ namespace tramlaw_test.Controllers
             if(!string.IsNullOrWhiteSpace(param.Query))
                 request.AddParameter("query", param.Query);
             var response = client.Execute(request);
-            if(response.StatusCode == HttpStatusCode.Accepted)
+            if(response.StatusCode == (HttpStatusCode)200)
                 return Ok(response.Content);
             return BadRequest(response.Content);
         }
