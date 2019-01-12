@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
-import { Container, Row, Col } from 'reactstrap'
+import { Container, Row, Col } from 'reactstrap';
+import { Link } from 'react-router-dom';
 import axios from 'axios';
 
 export class Search extends Component { 
@@ -58,7 +59,7 @@ export class Search extends Component {
                         <Col xs={4}>
                             <Container>
                                 <Row>
-                                    <span>{result.name}</span>
+                                    <Link to={`/Detail/${result.itemId}`}>{result.name}</Link>
                                 </Row>
                                 <Row>
                                     <span>${result.salePrice}</span>
