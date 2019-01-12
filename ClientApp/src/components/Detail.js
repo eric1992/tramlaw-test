@@ -50,6 +50,47 @@ export class Detail extends Component {
         return txt.value;
     };
 
+    renderRecommendation = (recommendation, i) => (
+        <Col key={i}>
+            <Row>
+                <img src={recommendation.thumbnailImage} />
+            </Row>
+            <Row>
+                <Link to={`/Detail/${recommendation.itemId}`}>{recommendation.name}</Link>
+            </Row>
+        </Col>       
+    );
+
+    renderRecommendations = (recommendations = this.state.recommendations) => 
+        !recommendations.length
+            ? <span>There are no recommendations for this item</span>
+            : recommendations.map(this.renderRecommendation);
+    
+    renderRatings = (detail = this.state.detail) => (
+            detail.customerRatingImage
+                && detail.customerRating
+                && detail.numReviews
+                ? (<Row>
+                    <Col>
+                        <img src={detail.customerRatingImage} />
+                        <span>({detail.customerRating})</span>
+                    </Col>
+                    <Col>
+                        <span>({detail.numReviews}) Customer Review{(detail.numReviews === 1 ? '' : 's')}</span>
+                    </Col>
+                </Row>)
+                : <Row>
+                    <span>No customer reviews are available</span>
+                </Row>
+        )
+
+    renderPrice = (salePrice = this.state.detail.salePrice) => (
+        <Row>
+            {salePrice
+                ? <h2>${salePrice}</h2>
+                : <h2>There is no price information</h2>}
+        </Row>)
+
 
     render() {
         return (
@@ -66,18 +107,8 @@ export class Detail extends Component {
                                     <Row>
                                         <h1>{this.state.detail.name}</h1>
                                     </Row>
-                                    <Row>
-                                        <Col>
-                                            <img src={this.state.detail.customerRatingImage} />
-                                            <span>({this.state.detail.customerRating})</span>
-                                        </Col>
-                                        <Col>
-                                            <span>({this.state.detail.numReviews}) Customer Review{(this.state.detail.numReviews === 1 ? "" : "s")}</span>
-                                        </Col>
-                                    </Row>
-                                    <Row>
-                                        <h2>${this.state.detail.salePrice}</h2>
-                                    </Row>
+                                    {this.renderRatings()}
+                                    {this.renderPrice()}
                                 </Col>
                             </Row>
                             <Row>
@@ -86,22 +117,7 @@ export class Detail extends Component {
                             <Row>
                                 <h2>Recommendations</h2>
                             </Row>
-                            <Row>
-                                {!this.state.recommendations.length
-                                    ? <span>There are no recommendations for this item</span>
-                                    : null}
-                                {this.state.recommendations.length
-                                    ? this.state.recommendations.map((recommendation, i) => (
-                                            <Col key={i}>
-                                                <Row>
-                                                <img src={recommendation.thumbnailImage} />
-                                                </Row>
-                                                <Row>
-                                                <Link to={`/Detail/${recommendation.itemId}`}>{recommendation.name}</Link>
-                                                </Row>
-                                            </Col>))
-                                    : null}
-                            </Row>
+                            <Row>{this.renderRecommendations()}</Row>
                         </Container>
                     )
                 }
