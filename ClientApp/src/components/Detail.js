@@ -20,7 +20,12 @@ export class Detail extends Component {
                 })
             })
     }
-
+    
+    decodeHTML = function (html) {
+        var txt = document.createElement('textarea');
+        txt.innerHTML = html;
+        return txt.value;
+    };
 
 
     render() {
@@ -37,9 +42,22 @@ export class Detail extends Component {
                                 <Col>
                                     <Container>
                                         <Row>
+                                            <h1>{this.state.detail.name}</h1>
+                                        </Row>
+                                        <Row>
                                             <Col>
-                                                <h1>{this.state.detail.name}</h1>
+                                                <img src={this.state.detail.customerRatingImage} />
+                                                <span>({this.state.detail.customerRating})</span>
                                             </Col>
+                                            <Col>
+                                                <span>({this.state.detail.numReviews}) Customer Review{(this.state.detail.numReviews === 1 ? "" : "s")}</span>
+                                            </Col>
+                                        </Row>
+                                        <Row>
+                                            <h2>${this.state.detail.salePrice}</h2>
+                                        </Row>
+                                        <Row>
+                                            <div dangerouslySetInnerHTML={{__html: this.decodeHTML(this.state.detail.longDescription)}}></div>
                                         </Row>
                                     </Container>
                                 </Col>
