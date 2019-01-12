@@ -59,7 +59,9 @@ export class Detail extends Component {
                 <Link to={`/Detail/${recommendation.itemId}`}>{recommendation.name}</Link>
             </Row>
             <Row>
-                <span>${recommendation.salePrice.toFixed(2)}</span>
+                {recommendation.salePrice
+                    ? <span>${recommendation.salePrice.toFixed(2)}</span>
+                    : <span>There is no price information</span>}
             </Row>
         </Col>       
     );
