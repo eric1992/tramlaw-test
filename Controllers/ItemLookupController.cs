@@ -11,19 +11,32 @@ namespace tramlaw_test.Controllers
 {
     public class ItemLookupController : Controller
     {
-        public class ItemLookupParams
+        private readonly Settings Settings;
+        private readonly IRestClient APIClient;
+        public ItemLookupController()
         {
-            public string UPC { get; }
+            Settings = new Settings();
+            APIClient = new RestClient(Settings.WalmartBaseURL);
         }
 
         [HttpGet("/api/Items/{itemId}")]
         public IActionResult ItemLookup(string itemId)
         {
-            var settings = new Settings();
-            var client = new RestClient(settings.WalmartBaseURL);
             var request = new RestRequest($"items/{itemId}", Method.GET);
-            request.AddParameter("apiKey", settings.WalmartAPIKey);
-            var response = client.Execute(request);
+            request.AddParameter("apiKey", Settings.WalmartAPIKey);
+            var response = APIClient.Execute(request);
+            if(response.StatusCode == (HttpStatusCode)200)
+                return Ok(response.Content);
+            return BadRequest(response.Content);
+        }
+
+        [HttpGet("/api/Items/{itemId}/Recommendations")]
+        public IActionResult ItemRecommendations(string itemId)
+        {
+            var request = new RestRequest("nbp", Method.GET);
+            request.AddParameter("apiKey", Settings.WalmartAPIKey);
+            request.AddParameter("itemId", itemId);
+            var response = APIClient.Execute(request);
             if(response.StatusCode == (HttpStatusCode)200)
                 return Ok(response.Content);
             return BadRequest(response.Content);
