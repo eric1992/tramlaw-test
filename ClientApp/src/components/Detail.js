@@ -58,6 +58,9 @@ export class Detail extends Component {
             <Row>
                 <Link to={`/Detail/${recommendation.itemId}`}>{recommendation.name}</Link>
             </Row>
+            <Row>
+                <span>${recommendation.salePrice.toFixed(2)}</span>
+            </Row>
         </Col>       
     );
 
@@ -87,7 +90,7 @@ export class Detail extends Component {
     renderPrice = (salePrice = this.state.detail.salePrice) => (
         <Row>
             {salePrice
-                ? <h2>${salePrice}</h2>
+                ? <h2>${salePrice.toFixed(2)}</h2>
                 : <h2>There is no price information</h2>}
         </Row>)
 
@@ -117,7 +120,9 @@ export class Detail extends Component {
                             <Row>
                                 <h2>Recommendations</h2>
                             </Row>
-                            <Row>{this.renderRecommendations()}</Row>
+                            <Row>
+                                {this.renderRecommendations()}
+                            </Row>
                         </Container>
                     )
                 }
