@@ -2,6 +2,13 @@ import React, { Component } from 'react';
 import { Container, Row, Col } from 'reactstrap';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
+import { css } from '@emotion/core';
+import ClipLoader from 'react-spinners/ClipLoader';
+const override = css`
+    display: block;
+    margin: 0 auto;
+    border-color: red;
+`;
 
 export class Search extends Component { 
     constructor(){
@@ -9,17 +16,25 @@ export class Search extends Component {
         this.state = {
             results: [],
             query: '',
+            loadingResults: false
         }
     }
 
-    search = (query = this.state.query) => {
-        axios.get(`/api/Search?query=${query}`)
+    search = () => {
+        this.setState({
+            loadingResults: true,
+            results: [],
+        }, () => {
+        axios.get(`/api/Search?query=${this.state.query}`)
             .then(resp => {
                 this.setState({
-                    results: resp.data.items
+                    results: resp.data.items,
+                    loadingResults: false,
                 })
-            })
+            })})
+
     }
+    
 
     queryChange = (e) => {
         this.setState({
@@ -66,9 +81,17 @@ export class Search extends Component {
                 {(this.state.results
                     && this.state.results.length)
                     ?  this.state.results.map(this.renderResultRow)
-                    : (<Row>
+                    : (this.state.loadingResults
+                        ? null
+                        : <Row>
                         <span>There are no results</span>
                     </Row>)}
+                <ClipLoader
+                    css={override}
+                    sizeUnit={"px"}
+                    size={150}
+                    color={'#123abc'}
+                    loading={this.state.loadingResults} />
             </Container>
         )
     }

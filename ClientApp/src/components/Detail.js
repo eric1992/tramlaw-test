@@ -1,7 +1,14 @@
 import React, { Component } from 'react';
-import { Container, Row, Col } from 'reactstrap'
+import { Container, Row, Col } from 'reactstrap';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
+import { css } from '@emotion/core';
+import ClipLoader from 'react-spinners/ClipLoader';
+const override = css`
+    display: block;
+    margin: 0 auto;
+    border-color: red;
+`;
 
 export class Detail extends Component {
     constructor(props){
@@ -10,6 +17,8 @@ export class Detail extends Component {
         this.state = {
             detail: null,
             recommendations: [],
+            loadingDetail: true,
+            loadingRecommendations: true,
         }
         this.getDetails();
         this.getRecommendations();
@@ -19,6 +28,8 @@ export class Detail extends Component {
         this.setState({
             detail: null,
             recommendation: [],
+            loadingDetail: true,
+            loadingRecommendations: true,
         }, () => {
             this.getDetails(nextProps.match.params.itemId);
             this.getRecommendations(nextProps.match.params.itemId)
@@ -30,8 +41,9 @@ export class Detail extends Component {
             .then(resp => {
                 this.setState({
                     detail: resp.data,
+                    loadingDetail: false,
                 })
-            })
+            });
     }
 
     getRecommendations = (itemId = this.props.match.params.itemId) => {
@@ -40,8 +52,13 @@ export class Detail extends Component {
                 if(resp.data.length)
                     this.setState({
                         recommendations: resp.data.filter((item, i) => i < 10),
+                        loadingRecommendations: false,
                     });
-            })
+                else 
+                    this.setState({
+                        loadingRecommendations: false
+                    });
+            });
     }
     
     decodeHTML = function (html) {
@@ -100,9 +117,14 @@ export class Detail extends Component {
     render() {
         return (
             <div>
-                {!this.state.detail
-                    ? null
-                    : (
+                <ClipLoader
+                    css={override}
+                    sizeUnit={"px"}
+                    size={150}
+                    color={'#123abc'}
+                    loading={this.state.loadingDetail} />
+                {this.state.detail
+                    && (
                         <Container>
                             <Row>
                                 <Col>
@@ -121,6 +143,14 @@ export class Detail extends Component {
                             </Row>
                             <Row>
                                 <h2>Recommendations</h2>
+                            </Row>
+                            <Row>
+                                <ClipLoader
+                                    css={override}
+                                    sizeUnit={"px"}
+                                    sie={150}
+                                    color={'#123abc'}
+                                    loading={!this.state.loadingDetail && this.state.loadingRecommendations}/>
                             </Row>
                             <Row>
                                 {this.renderRecommendations()}
