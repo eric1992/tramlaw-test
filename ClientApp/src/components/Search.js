@@ -33,6 +33,27 @@ export class Search extends Component {
         }
     }
 
+    renderResultRow = (result, i) => (
+        <Row key={i}
+            style={{margin: '10px'}}>
+            <Col xs={2}>
+                <img src={result.thumbnailImage} />
+            </Col>
+            <Col xs={4}>
+                <Container>
+                    <Row>
+                        <Link to={`/Detail/${result.itemId}`}>{result.name}</Link>
+                    </Row>
+                    <Row>
+                        {result.salePrice 
+                            ? <span>${result.salePrice}</span>
+                            : <span>There is no price information</span>}
+                    </Row>
+                </Container>
+            </Col>
+        </Row>
+        )
+
     render () {
         return (
             <Container>
@@ -42,33 +63,12 @@ export class Search extends Component {
                         onKeyPress={this.handleSearchKeyPress}/>
                     <button onClick={this.search}>Search</button>
                 </Row>
-                {(!this.state.results
-                    || !this.state.results.length)
-                    ? (<Row>
-                        <span>There are no results</span>
-                    </Row>)
-                    : null}
                 {(this.state.results
                     && this.state.results.length)
-                    ? this.state.results.map((result, i) => (
-                    <Row key={i}
-                        style={{margin: '10px'}}>
-                        <Col xs={2}>
-                            <img src={result.thumbnailImage} />
-                        </Col>
-                        <Col xs={4}>
-                            <Container>
-                                <Row>
-                                    <Link to={`/Detail/${result.itemId}`}>{result.name}</Link>
-                                </Row>
-                                <Row>
-                                    <span>${result.salePrice}</span>
-                                </Row>
-                            </Container>
-                        </Col>
-                    </Row>
-                    ))
-                    : null}
+                    ?  this.state.results.map(this.renderResultRow)
+                    : (<Row>
+                        <span>There are no results</span>
+                    </Row>)}
             </Container>
         )
     }
