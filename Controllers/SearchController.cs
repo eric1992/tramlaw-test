@@ -15,6 +15,7 @@ namespace tramlaw_test.Controllers
         {
             public string Query { get; set;}
             public string CategoryId { get; set; }
+            public uint? Start { get; set; }
         }
 
         private readonly Settings Settings;
@@ -35,6 +36,8 @@ namespace tramlaw_test.Controllers
                 request.AddParameter("query", param.Query);
             if(!string.IsNullOrWhiteSpace(param.CategoryId))
                 request.AddParameter("categoryId", param.CategoryId);
+            if(param.Start.HasValue)
+                request.AddParameter("start", param.Start);
             var response = APIClient.Execute(request);
             if(response.StatusCode == (HttpStatusCode)200)
                 return Ok(response.Content);

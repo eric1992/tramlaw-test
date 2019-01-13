@@ -5,6 +5,9 @@ import axios from 'axios';
 import ClipLoader from 'react-spinners/ClipLoader';
 import { Categories } from './Categories';
 import { css } from '@emotion/core';
+import ReactDOM from "react-dom";
+import Pagination from 'rc-pagination';
+import 'rc-pagination/assets/index.css';
 const override = css`
     display: block;
     margin: 0 auto;
@@ -21,6 +24,8 @@ export class Search extends Component {
             loadingCategories: true,
             categories: [],
             categoryId: null,
+            page: 1,
+            totalResults: 0,
         }
         this.loadCategories();
     }
@@ -36,6 +41,8 @@ export class Search extends Component {
                     queryStringParams .push({id: 'query', value: this.state.query });
                 if(this.state.categoryId)
                     queryStringParams .push({id: 'categoryId', value: this.state.categoryId })
+                if(this.state.page)
+                    queryStringParams.push({id: 'start', value: 1 + (parseInt(this.state.page, 10) - 1) * 10})
                 const queryString = queryStringParams
                     .map(param => `${param.id}=${param.value}`)
                     .join('&');
@@ -43,6 +50,7 @@ export class Search extends Component {
                     .then(resp => {
                         this.setState({
                             results: resp.data.items,
+                            totalResults: resp.data.totalResults,
                             loadingResults: false,
                         })
                     })
@@ -67,16 +75,20 @@ export class Search extends Component {
         })
     }
 
+    handlePageChange = (pageNumber) => 
+        this.setState({
+            page: pageNumber,
+        }, this.search)
+
     handleSearchKeyPress = (e) => {
         if (e.key === 'Enter') {
             this.search();
         }
     }
 
-    categoryChange = (categoryId) => {
-        this.setState({
-            categoryId: categoryId,
-        })
+    handlePageKeyPress = (e) => {
+        if (e.key === 'Enter')
+            this.search();
     }
 
     setCategoryId = (categoryId) => {
@@ -141,7 +153,18 @@ export class Search extends Component {
                     <Col>
                         {(this.state.results
                         && this.state.results.length)
-                        ?  this.state.results.map(this.renderResultRow)
+                        ?  (
+                            <Container>
+                                <Row>
+                                    <Pagination 
+                                        current={this.state.page}
+                                        pageSize={10}
+                                        total={this.state.totalResults < 1000 ? this.state.totalResults : 1000}
+                                        onChange={this.handlePageChange}/>
+                                </Row>
+                                {this.state.results.map(this.renderResultRow)}
+                            </Container>
+                        )
                         : (this.state.loadingResults
                             ? null
                             : <Row>
