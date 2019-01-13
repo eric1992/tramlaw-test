@@ -34,7 +34,7 @@ namespace tramlaw_test.Controllers
             if(!string.IsNullOrWhiteSpace(param.Query))
                 request.AddParameter("query", param.Query);
             if(!string.IsNullOrWhiteSpace(param.CategoryId))
-                request.AddParameter("categortId", param.CategoryId);
+                request.AddParameter("categoryId", param.CategoryId);
             var response = APIClient.Execute(request);
             if(response.StatusCode == (HttpStatusCode)200)
                 return Ok(response.Content);

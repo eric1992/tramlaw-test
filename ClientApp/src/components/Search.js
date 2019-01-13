@@ -2,13 +2,14 @@ import React, { Component } from 'react';
 import { Container, Row, Col } from 'reactstrap';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
-import { css } from '@emotion/core';
 import ClipLoader from 'react-spinners/ClipLoader';
+import { Categories } from './Categories';
+import { css } from '@emotion/core';
 const override = css`
     display: block;
     margin: 0 auto;
     border-color: red;
-`;
+`
 
 export class Search extends Component { 
     constructor(){
@@ -16,23 +17,47 @@ export class Search extends Component {
         this.state = {
             results: [],
             query: '',
-            loadingResults: false
+            loadingResults: false,
+            loadingCategories: true,
+            categories: [],
+            categoryId: null,
         }
+        this.loadCategories();
     }
 
     search = () => {
-        this.setState({
-            loadingResults: true,
-            results: [],
-        }, () => {
-        axios.get(`/api/Search?query=${this.state.query}`)
+        if(this.state.query){
+            this.setState({
+                loadingResults: true,
+                results: [],
+            }, () => {
+                const queryStringParams = []
+                if(this.state.query)
+                    queryStringParams .push({id: 'query', value: this.state.query });
+                if(this.state.categoryId)
+                    queryStringParams .push({id: 'categoryId', value: this.state.categoryId })
+                const queryString = queryStringParams
+                    .map(param => `${param.id}=${param.value}`)
+                    .join('&');
+                axios.get(`/api/Search?${queryString}`)
+                    .then(resp => {
+                        this.setState({
+                            results: resp.data.items,
+                            loadingResults: false,
+                        })
+                    })
+            });
+        }
+    }
+
+    loadCategories = () => {
+        axios.get('/api/Categories')
             .then(resp => {
                 this.setState({
-                    results: resp.data.items,
-                    loadingResults: false,
+                    categories: resp.data.categories,
+                    loadingCategories: false,
                 })
-            })})
-
+            });
     }
     
 
@@ -48,13 +73,25 @@ export class Search extends Component {
         }
     }
 
+    categoryChange = (categoryId) => {
+        this.setState({
+            categoryId: categoryId,
+        })
+    }
+
+    setCategoryId = (categoryId) => {
+        this.setState({
+            categoryId: categoryId,
+        })
+    }
+
     renderResultRow = (result, i) => (
         <Row key={i}
             style={{margin: '10px'}}>
-            <Col xs={2}>
+            <Col>
                 <img src={result.thumbnailImage} />
             </Col>
-            <Col xs={4}>
+            <Col>
                 <Container>
                     <Row>
                         <Link to={`/Detail/${result.itemId}`}>{result.name}</Link>
@@ -63,6 +100,11 @@ export class Search extends Component {
                         {result.salePrice 
                             ? <span>${result.salePrice}</span>
                             : <span>There is no price information</span>}
+                    </Row>
+                    <Row>
+                        {result.categoryPath
+                            ? <span>{result.categoryPath}</span>
+                            : <span>There is no category infor for this item</span>}
                     </Row>
                 </Container>
             </Col>
@@ -73,25 +115,46 @@ export class Search extends Component {
         return (
             <Container>
                 <Row>
-                    <input value={this.state.query}
-                        onChange={this.queryChange}
-                        onKeyPress={this.handleSearchKeyPress}/>
-                    <button onClick={this.search}>Search</button>
+                    <Col>
+                        <Row>
+                            <input value={this.state.query}
+                                onChange={this.queryChange}
+                                onKeyPress={this.handleSearchKeyPress}/>
+                            <button onClick={this.search}>Search</button>
+                        </Row>
+                        <Row>
+                            <h5>Categories</h5>
+                        </Row>
+                        <Row>
+                            <ClipLoader
+                                css={override}
+                                sizeUnit={"px"}
+                                size={150}
+                                color={'#123abc'}
+                                loading={this.state.loadingCategories} />
+                            <Categories
+                                parentCategoryId={null}
+                                categories={this.state.categories}
+                                setCategoryId={this.setCategoryId}/>
+                        </Row>
+                    </Col>
+                    <Col>
+                        {(this.state.results
+                        && this.state.results.length)
+                        ?  this.state.results.map(this.renderResultRow)
+                        : (this.state.loadingResults
+                            ? null
+                            : <Row>
+                            <span>There are no results</span>
+                        </Row>)}
+                        <ClipLoader
+                            css={override}
+                            sizeUnit={"px"}
+                            size={150}
+                            color={'#123abc'}
+                            loading={this.state.loadingResults} />
+                    </Col>
                 </Row>
-                {(this.state.results
-                    && this.state.results.length)
-                    ?  this.state.results.map(this.renderResultRow)
-                    : (this.state.loadingResults
-                        ? null
-                        : <Row>
-                        <span>There are no results</span>
-                    </Row>)}
-                <ClipLoader
-                    css={override}
-                    sizeUnit={"px"}
-                    size={150}
-                    color={'#123abc'}
-                    loading={this.state.loadingResults} />
             </Container>
         )
     }
