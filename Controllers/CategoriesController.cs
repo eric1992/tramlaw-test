@@ -9,37 +9,26 @@ using tramlaw_test;
 
 namespace tramlaw_test.Controllers
 {
-    public class SearchController : Controller
+    public class CategoriesController : Controller
     {
-        public class SearchParams 
-        {
-            public string Query { get; set;}
-            public string CategoryId { get; set; }
-        }
-
         private readonly Settings Settings;
         private readonly IRestClient APIClient;
-
-        public SearchController() 
+        public CategoriesController  ()
         {
             Settings = new Settings();
             APIClient = new RestClient(Settings.WalmartBaseURL);
         }
 
-        [HttpGet("/api/Search")]
-        public IActionResult Search([FromQuery]SearchParams param)
+        [HttpGet("/api/Categories")]
+        public IActionResult Categories()
         {
-            var request = new RestRequest("search", Method.GET);
+            var request = new RestRequest("taxonomy");
             request.AddParameter("apiKey", Settings.WalmartAPIKey);
-            if(!string.IsNullOrWhiteSpace(param.Query))
-                request.AddParameter("query", param.Query);
-            if(!string.IsNullOrWhiteSpace(param.CategoryId))
-                request.AddParameter("categortId", param.CategoryId);
             var response = APIClient.Execute(request);
             if(response.StatusCode == (HttpStatusCode)200)
                 return Ok(response.Content);
             return BadRequest(response.Content);
         }
-
     }
+    
 }
