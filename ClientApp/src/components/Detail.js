@@ -73,19 +73,19 @@ export class Detail extends Component {
                 <img src={recommendation.thumbnailImage} />
             </Row>
             <Row>
-                <Link to={`/Detail/${recommendation.itemId}`}>{recommendation.name}</Link>
+                <Link className={'appFont'} to={`/Detail/${recommendation.itemId}`}>{recommendation.name}</Link>
             </Row>
             <Row>
                 {recommendation.salePrice
-                    ? <span>${recommendation.salePrice.toFixed(2)}</span>
-                    : <span>There is no price information</span>}
+                    ? <span className={'appFont'}>${recommendation.salePrice.toFixed(2)}</span>
+                    : <span className={'appFont'}>There is no price information</span>}
             </Row>
         </Col>       
     );
 
     renderRecommendations = (recommendations = this.state.recommendations) => 
         !recommendations.length
-            ? <span>There are no recommendations for this item</span>
+            ? <span className={'appFont'}>There are no recommendations for this item</span>
             : recommendations.map(this.renderRecommendation);
     
     renderRatings = (detail = this.state.detail) => (
@@ -95,22 +95,24 @@ export class Detail extends Component {
                 ? (<Row>
                     <Col>
                         <img src={detail.customerRatingImage} />
-                        <span>({detail.customerRating})</span>
+                        <span className={'appFont'}>({detail.customerRating})</span>
                     </Col>
                     <Col>
-                        <span>({detail.numReviews}) Customer Review{(detail.numReviews === 1 ? '' : 's')}</span>
+                        <span className={'appFont'}>({detail.numReviews}) Customer Review{(detail.numReviews === 1 ? '' : 's')}</span>
                     </Col>
                 </Row>)
                 : <Row>
-                    <span>No customer reviews are available</span>
+                    <span className={'appFont'}>No customer reviews are available</span>
                 </Row>
         )
 
     renderPrice = (salePrice = this.state.detail.salePrice) => (
         <Row>
-            {salePrice
-                ? <h2>${salePrice.toFixed(2)}</h2>
-                : <h2>There is no price information</h2>}
+            <h2 className={'appFont'}>
+                {salePrice
+                    ? "$" + salePrice.toFixed(2)
+                    : 'There is no price information'}
+            </h2>
         </Row>)
 
 
@@ -132,17 +134,17 @@ export class Detail extends Component {
                                 </Col>
                                 <Col>
                                     <Row>
-                                        <h1>{this.state.detail.name}</h1>
+                                        <h1 className={'appFont'}>{this.state.detail.name}</h1>
                                     </Row>
                                     {this.renderRatings()}
                                     {this.renderPrice()}
                                 </Col>
                             </Row>
                             <Row>
-                                <div dangerouslySetInnerHTML={{__html: this.decodeHTML(this.state.detail.longDescription)}}></div>
+                                <div className={'appFont'} dangerouslySetInnerHTML={{__html: this.decodeHTML(this.state.detail.longDescription)}}></div>
                             </Row>
                             <Row>
-                                <h2>Recommendations</h2>
+                                <h2 className={'appFont'}>Recommendations</h2>
                             </Row>
                             <Row>
                                 <ClipLoader

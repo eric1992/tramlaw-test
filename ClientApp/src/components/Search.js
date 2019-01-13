@@ -12,7 +12,7 @@ const override = css`
     display: block;
     margin: 0 auto;
     border-color: red;
-`
+`;
 
 export class Search extends Component { 
     constructor(){
@@ -106,17 +106,17 @@ export class Search extends Component {
             <Col>
                 <Container>
                     <Row>
-                        <Link to={`/Detail/${result.itemId}`}>{result.name}</Link>
+                        <Link className={'appFont'} to={`/Detail/${result.itemId}`}>{result.name}</Link>
                     </Row>
                     <Row>
                         {result.salePrice 
-                            ? <span>${result.salePrice}</span>
-                            : <span>There is no price information</span>}
+                            ? <span className={'appFont'}>${result.salePrice}</span>
+                            : <span className={'appFont'}>There is no price information</span>}
                     </Row>
                     <Row>
                         {result.categoryPath
-                            ? <span>{result.categoryPath}</span>
-                            : <span>There is no category infor for this item</span>}
+                            ? <span className={'appFont'}>{result.categoryPath}</span>
+                            : <span className={'appFont'}>There is no category infor for this item</span>}
                     </Row>
                 </Container>
             </Col>
@@ -129,13 +129,14 @@ export class Search extends Component {
                 <Row>
                     <Col>
                         <Row>
-                            <input value={this.state.query}
+                            <input className={'appFont'} 
+                                value={this.state.query}
                                 onChange={this.queryChange}
                                 onKeyPress={this.handleSearchKeyPress}/>
-                            <button onClick={this.search}>Search</button>
+                            <button className={'appFont'} onClick={this.search}>Search</button>
                         </Row>
                         <Row>
-                            <h5>Categories</h5>
+                            <h5 className={'appFont'}>Categories</h5>
                         </Row>
                         <Row>
                             <ClipLoader
@@ -168,7 +169,7 @@ export class Search extends Component {
                         : (this.state.loadingResults
                             ? null
                             : <Row>
-                            <span>There are no results</span>
+                            <span className={'appFont'}>There are no results</span>
                         </Row>)}
                         <ClipLoader
                             css={override}
