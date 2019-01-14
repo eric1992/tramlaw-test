@@ -1,6 +1,6 @@
 # Tramlaw
 
-Tramlaw is an app that searches items from the [Walmart Open API].(https://developer.walmartlabs.com/) 
+Tramlaw is an app that searches items from the [Walmart Open API](https://developer.walmartlabs.com/).
 
 ## Getting Started
 
