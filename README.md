@@ -4,7 +4,7 @@ Tramlaw is an app that searches items from the [Walmart Open API](https://develo
 
 ## Getting Started
 
-First intall the prerequisites, then move on to the Installing section, and finally Running.
+First install the prerequisites, then move on to the Building section, and finally Running.
 
 ### Prerequisites
 
@@ -12,7 +12,7 @@ First intall the prerequisites, then move on to the Installing section, and fina
 * [.net core cli tools](https://dotnet.microsoft.com/download)
 * [node.js](https://nodejs.org/en/download/)
 
-### Installing
+### Building
 
 From the command line download the repository with the following command.
 
