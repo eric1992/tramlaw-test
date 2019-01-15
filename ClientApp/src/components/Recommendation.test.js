@@ -2,6 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { Recommendation } from './Recommendation';
 import { shallow, configure } from 'enzyme';
+import { MemoryRouter } from 'react-router-dom';
 import Adapter from 'enzyme-adapter-react-16';
 
 configure({ adapter: new Adapter() });
@@ -28,4 +29,14 @@ it('renders without prop salePrice', () => {
     const wrapper = shallow(<Recommendation thumbnailImage={"test"} itemId={1} name={'test'}/>);
     const error = <span>Must pass prop salePrice</span>;
     expect(wrapper.contains(error)).toEqual(true);
+})
+
+it('renders with all props passed', () => {
+    const div = document.createElement('div');
+    ReactDOM.render(<MemoryRouter>
+        <Recommendation thumbnailImage={"test"} 
+            itemId={1} 
+            name={'test'} 
+            salePrice={1.2}/>
+    </MemoryRouter>, div);
 })

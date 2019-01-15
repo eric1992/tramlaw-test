@@ -17,3 +17,8 @@ it('renders with empty prop recommendations', () => {
     const error = <span>There are no recommendations</span>;
     expect(wrapper.contains(error)).toEqual(true);
 });
+
+it('renders with one recommedation prop', () => {
+    const recommendations = [{test:"test"}]
+    const wrapper = shallow(<Recommendations recommendations={recommendations}/>);
+})
