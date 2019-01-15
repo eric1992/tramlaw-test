@@ -120,7 +120,9 @@ export class Detail extends Component {
                                 </Col>
                             </Row>
                             <Row>
-                                <div dangerouslySetInnerHTML={{__html: this.decodeHTML(this.state.detail.longDescription)}}></div>
+                                {this.state.detail.longDescription
+                                    &&<div dangerouslySetInnerHTML={{__html: this.decodeHTML(this.state.detail.longDescription)}}></div>}
+                                
                             </Row>
                             <Row>
                                 <h2>Recommendations</h2>
