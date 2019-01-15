@@ -42,3 +42,11 @@ dotnet run
 
 The app should now be up and running at https://localhost5001
 
+### Testing
+
+From the directory tramlaw-test/ClientApp run the following command
+
+```
+npm test
+```
+
