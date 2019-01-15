@@ -14,7 +14,6 @@ const override = css`
 export class Detail extends Component {
     constructor(props){
         super(props);
-        console.log(props);
         this.state = {
             detail: null,
             recommendations: [],
