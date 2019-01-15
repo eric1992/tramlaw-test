@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 import axios from 'axios';
 import { css } from '@emotion/core';
 import ClipLoader from 'react-spinners/ClipLoader';
+import { Recommendations } from './Recommendations';
 const override = css`
     display: block;
     margin: 0 auto;
@@ -67,27 +68,6 @@ export class Detail extends Component {
         return txt.value;
     };
 
-    renderRecommendation = (recommendation, i) => (
-        <Col key={i}>
-            <Row>
-                <img src={recommendation.thumbnailImage} />
-            </Row>
-            <Row>
-                <Link className={'appFont'} to={`/Detail/${recommendation.itemId}`}>{recommendation.name}</Link>
-            </Row>
-            <Row>
-                {recommendation.salePrice
-                    ? <span className={'appFont'}>${recommendation.salePrice.toFixed(2)}</span>
-                    : <span className={'appFont'}>There is no price information</span>}
-            </Row>
-        </Col>       
-    );
-
-    renderRecommendations = (recommendations = this.state.recommendations) => 
-        !recommendations.length
-            ? <span className={'appFont'}>There are no recommendations for this item</span>
-            : recommendations.map(this.renderRecommendation);
-    
     renderRatings = (detail = this.state.detail) => (
             detail.customerRatingImage
                 && detail.customerRating
@@ -95,20 +75,20 @@ export class Detail extends Component {
                 ? (<Row>
                     <Col>
                         <img src={detail.customerRatingImage} />
-                        <span className={'appFont'}>({detail.customerRating})</span>
+                        <span>({detail.customerRating})</span>
                     </Col>
                     <Col>
-                        <span className={'appFont'}>({detail.numReviews}) Customer Review{(detail.numReviews === 1 ? '' : 's')}</span>
+                        <span>({detail.numReviews}) Customer Review{(detail.numReviews === 1 ? '' : 's')}</span>
                     </Col>
                 </Row>)
                 : <Row>
-                    <span className={'appFont'}>No customer reviews are available</span>
+                    <span>No customer reviews are available</span>
                 </Row>
         )
 
     renderPrice = (salePrice = this.state.detail.salePrice) => (
         <Row>
-            <h2 className={'appFont'}>
+            <h2>
                 {salePrice
                     ? "$" + salePrice.toFixed(2)
                     : 'There is no price information'}
@@ -118,7 +98,7 @@ export class Detail extends Component {
 
     render() {
         return (
-            <div>
+            <div className={'appFont'}>
                 <ClipLoader
                     css={override}
                     sizeUnit={"px"}
@@ -134,17 +114,17 @@ export class Detail extends Component {
                                 </Col>
                                 <Col>
                                     <Row>
-                                        <h1 className={'appFont'}>{this.state.detail.name}</h1>
+                                        <h1>{this.state.detail.name}</h1>
                                     </Row>
                                     {this.renderRatings()}
                                     {this.renderPrice()}
                                 </Col>
                             </Row>
                             <Row>
-                                <div className={'appFont'} dangerouslySetInnerHTML={{__html: this.decodeHTML(this.state.detail.longDescription)}}></div>
+                                <div dangerouslySetInnerHTML={{__html: this.decodeHTML(this.state.detail.longDescription)}}></div>
                             </Row>
                             <Row>
-                                <h2 className={'appFont'}>Recommendations</h2>
+                                <h2>Recommendations</h2>
                             </Row>
                             <Row>
                                 <ClipLoader
@@ -155,7 +135,7 @@ export class Detail extends Component {
                                     loading={!this.state.loadingDetail && this.state.loadingRecommendations}/>
                             </Row>
                             <Row>
-                                {this.renderRecommendations()}
+                                <Recommendations recommendations={this.state.recommendations} />
                             </Row>
                         </Container>
                     )
