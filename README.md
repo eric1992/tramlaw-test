@@ -50,3 +50,8 @@ From the directory tramlaw-test/ClientApp run the following command
 npm test
 ```
 
+Or to see test coverage run
+
+```
+npm test -- --coverage
+```
