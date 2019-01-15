@@ -12,7 +12,11 @@ export class Recommendations extends Component {
             <Container className={'appFont'}>
                 <Row>{!this.props.recommendations || !this.props.recommendations.length
                     ? <span>There are no recommendations</span>
-                    : this.props.recommendations.map((recommendation, i) => <Recommendation key={i} recommendation={recommendation}/>)
+                    : this.props.recommendations.map((recommendation, i) => <Recommendation key={i} 
+                        thumbnailImage={recommendation.thumbnailImage}
+                        itemId={recommendation.itemId}
+                        name={recommendation.name}
+                        salePrice={recommendation.salePrice}/>)
                 }</Row>
             </Container>
         )
