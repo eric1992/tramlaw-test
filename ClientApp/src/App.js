@@ -11,7 +11,7 @@ export default class App extends Component {
 
   render () {
     return (
-      <Layout>
+      <Layout className={'appFont'}>
         <Route exact path='/' component={Home} />
         <Route exact path='/Search' component={Search} />
         <Route path='/Detail/:itemId' component={Detail} />

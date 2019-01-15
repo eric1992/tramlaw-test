@@ -13,6 +13,7 @@ export class Home extends Component {
           <li><a href='http://getbootstrap.com/'>Bootstrap</a> for layout and styling</li>
           <li><a href='https://developer.walmartlabs.com/'>Walmart open api</a> for data access layer</li>
         </ul>
+        <p>Click on the Search link at the top of the screen to begin.</p>
       </div>
     );
   }

@@ -27,7 +27,7 @@ export class Categories extends Component {
 
     renderCategory = (category, i) => (
         <Row key={i}>
-            <a className={'appFont'} onClick={this.handleCategoryClick(category)}>{category.name}</a>
+            <a onClick={this.handleCategoryClick(category)}>{category.name}</a>
         </Row>
     )
 
@@ -35,10 +35,10 @@ export class Categories extends Component {
         <Container>
             <Row>
                 <Col>
-                    <h6 className={'appFont'}>{category.name}</h6>
+                    <h6>{category.name}</h6>
                 </Col>
                 <Col>
-                    <a className={'appFont'} onClick={this.handleReset}>Reset</a>
+                    <a onClick={this.handleReset}>Reset</a>
                 </Col>
             </Row>
             <Row>
