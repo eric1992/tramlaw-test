@@ -9,7 +9,7 @@ export class Categories extends Component {
         }
     }
 
-    handleCategoryClick = (category) => (e) => {
+    handleCategoryClick = (category) => () => {
         this.setState({
               selectedCategory: category,
         }, () => {
